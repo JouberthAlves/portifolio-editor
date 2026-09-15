@@ -22,6 +22,7 @@ const hud = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://portifolio-editor-hazel.vercel.app"),
   title: "Caio Vidal — Editor de Vídeo",
   description:
     "Portfólio de Caio Vidal, editor de vídeo e colorista. Filmes de marca, videoclipes, documentários e publicidade.",
