@@ -52,7 +52,7 @@ export function Clients() {
   });
 
   return (
-    <section className="py-24 md:py-32" aria-labelledby="clients-title">
+    <section className="py-16 md:py-24 lg:py-32" aria-labelledby="clients-title">
       <div className="mx-auto mb-12 max-w-7xl px-4 sm:px-8">
         <p className="eyebrow mb-3">{t.clients.eyebrow}</p>
         <h2 id="clients-title" className="max-w-xl text-lg text-muted-foreground md:text-xl">

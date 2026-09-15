@@ -15,6 +15,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Logo } from "@/components/site/nav";
 import { useLang } from "@/lib/i18n";
+import { useIsMobile } from "@/lib/use-media";
 
 const LightRays = dynamic(() => import("@/components/LightRays"), { ssr: false });
 
@@ -35,6 +36,7 @@ function SectionHead({ eyebrow, title, id }: { eyebrow: string; title: string; i
 
 export function Reel() {
   const { t } = useLang();
+  const isMobile = useIsMobile();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
 
@@ -48,10 +50,14 @@ export function Reel() {
   };
 
   return (
-    <section className="relative overflow-hidden py-24 md:py-36" aria-labelledby="reel-title">
+    <section className="relative overflow-hidden py-16 md:py-28 lg:py-36" aria-labelledby="reel-title">
       {/* feixe de projetor */}
       <div className="pointer-events-none absolute inset-0 opacity-70" aria-hidden>
-        <LightRays raysOrigin="top-center" raysColor="#ecebe6" raysSpeed={0.6} lightSpread={0.7} rayLength={1.6} fadeDistance={1.1} noiseAmount={0.12} distortion={0.04} followMouse mouseInfluence={0.05} />
+        {isMobile ? (
+          <div className="absolute inset-x-0 top-0 h-3/4 bg-[radial-gradient(ellipse_50%_70%_at_50%_0%,rgb(236_235_230/0.16),transparent_70%)]" />
+        ) : (
+          <LightRays raysOrigin="top-center" raysColor="#ecebe6" raysSpeed={0.6} lightSpread={0.7} rayLength={1.6} fadeDistance={1.1} noiseAmount={0.12} distortion={0.04} followMouse mouseInfluence={0.05} />
+        )}
       </div>
 
       <div className="relative mx-auto max-w-6xl px-4 sm:px-8">
@@ -109,10 +115,10 @@ export function About() {
   ];
 
   return (
-    <section id="about" className="scroll-mt-16 border-t border-border py-24 md:py-32" aria-labelledby="about-title">
-      <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-8 md:grid-cols-[5fr_7fr] md:gap-20">
-        <div className="relative aspect-[3/4] overflow-hidden rounded-[var(--radius)] border border-border">
-          <Image src="/images/people/caio-vidal.webp" alt="Caio Vidal em sua ilha de edição" fill sizes="(min-width: 768px) 40vw, 100vw" className="object-cover" />
+    <section id="about" className="scroll-mt-16 border-t border-border py-16 md:py-24 lg:py-32" aria-labelledby="about-title">
+      <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-8 lg:grid-cols-[5fr_7fr] lg:gap-20">
+        <div className="relative mx-auto aspect-[3/4] w-full max-w-md overflow-hidden rounded-[var(--radius)] border border-border lg:max-w-none">
+          <Image src="/images/people/caio-vidal.webp" alt="Caio Vidal em sua ilha de edição" fill sizes="(min-width: 1024px) 40vw, 448px" className="object-cover" />
           <span className="absolute inset-3 border border-[var(--hud-line)] opacity-50" aria-hidden />
           <span className="absolute bottom-5 left-5 font-mono text-[0.65rem] tracking-[0.2em] uppercase">CV — São Paulo, BR</span>
         </div>
@@ -147,7 +153,7 @@ export function Services() {
   const icons = [Clapperboard, Palette, Sparkles, Volume2];
 
   return (
-    <section id="services" className="scroll-mt-16 border-t border-border py-24 md:py-32" aria-labelledby="services-title">
+    <section id="services" className="scroll-mt-16 border-t border-border py-16 md:py-24 lg:py-32" aria-labelledby="services-title">
       <div className="mx-auto max-w-7xl px-4 sm:px-8">
         <SectionHead eyebrow={t.services.eyebrow} title={t.services.title} id="services-title" />
 
@@ -193,10 +199,10 @@ export function Services() {
 export function Testimonials() {
   const { t } = useLang();
   return (
-    <section className="border-t border-border py-24 md:py-32" aria-labelledby="testimonials-title">
+    <section className="border-t border-border py-16 md:py-24 lg:py-32" aria-labelledby="testimonials-title">
       <div className="mx-auto max-w-7xl px-4 sm:px-8">
         <SectionHead eyebrow={t.testimonials.eyebrow} title={t.testimonials.title} id="testimonials-title" />
-        <div className="grid gap-3 md:grid-cols-3">
+        <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
           {t.testimonials.items.map((item, i) => (
             <Card key={item.n} className="justify-between rounded-[var(--radius)] border border-border bg-card py-6 ring-0">
               <CardContent className="px-6">
@@ -258,7 +264,7 @@ function Slate() {
   return (
     <div className="relative w-full max-w-md lg:ml-auto">
       {/* selo giratório */}
-      <div className="absolute -top-16 -right-4 z-10 hidden size-36 place-items-center sm:grid md:-right-10">
+      <div className="absolute -top-24 -right-2 z-10 hidden size-36 place-items-center sm:grid md:-right-10">
         <CircularText text={t.contact.badge.toUpperCase()} spinDuration={18} onHover="speedUp" className="!size-36 font-mono text-[0.62rem] tracking-[0.1em] text-foreground" />
         <span className="absolute grid size-14 place-items-center rounded-full border border-foreground/30 bg-background">
           <span className="rec-dot size-3 rounded-full bg-rec" />
@@ -267,7 +273,7 @@ function Slate() {
 
       {/* bastão da claquete */}
       <div
-        className="h-10 origin-bottom-left -rotate-6 rounded-t-[var(--radius)] border border-b-0 border-border transition-transform duration-500 ease-[var(--ease-cine)] group-hover/slate:rotate-0"
+        className="h-10 origin-bottom-left -rotate-3 sm:-rotate-6 rounded-t-[var(--radius)] border border-b-0 border-border transition-transform duration-500 ease-[var(--ease-cine)] group-hover/slate:rotate-0"
         style={{ background: "repeating-linear-gradient(-45deg, var(--foreground) 0 22px, var(--background) 22px 44px)" }}
         aria-hidden
       />
@@ -311,7 +317,7 @@ function Slate() {
 export function Contact() {
   const { t } = useLang();
   return (
-    <section id="contact" className="relative scroll-mt-16 overflow-hidden border-t border-border pt-24 md:pt-36" aria-labelledby="contact-title">
+    <section id="contact" className="relative scroll-mt-16 overflow-hidden border-t border-border pt-16 md:pt-28 lg:pt-36" aria-labelledby="contact-title">
       <div className="mx-auto grid max-w-7xl items-center gap-16 px-4 sm:px-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:gap-10">
         <div>
           <p className="eyebrow mb-6">{t.contact.eyebrow}</p>

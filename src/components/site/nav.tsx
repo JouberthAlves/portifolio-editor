@@ -65,7 +65,7 @@ export function Nav() {
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-8">
         <Logo />
 
-        <nav className="hidden items-center gap-1 md:flex" aria-label="Principal">
+        <nav className="hidden items-center gap-1 lg:flex" aria-label="Principal">
           {links.map((l) => (
             <Button key={l.href} asChild variant="ghost" size="sm" className="cursor-target font-mono text-[0.7rem] tracking-[0.18em] uppercase">
               <a href={l.href}>{l.label}</a>
@@ -73,14 +73,14 @@ export function Nav() {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-3 md:flex">
+        <div className="hidden items-center gap-3 lg:flex">
           <LangToggle />
           <Button asChild size="sm" className="cursor-target bg-rec text-foreground hover:bg-rec/85">
             <a href="#contact">{t.nav.cta}</a>
           </Button>
         </div>
 
-        <div className="flex items-center gap-2 md:hidden">
+        <div className="flex items-center gap-2 lg:hidden">
           <LangToggle />
           <Sheet>
             <SheetTrigger asChild>
