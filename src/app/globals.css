@@ -28,6 +28,7 @@
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
   --color-rec: var(--rec);
+  --color-live: var(--live);
   --color-surface: var(--surface);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
@@ -56,6 +57,7 @@
   --accent: #1a1a1e;
   --accent-foreground: #ecebe6;
   --rec: #ff3b30;
+  --live: #34d399;
   --destructive: #ff3b30;
   --border: rgb(255 255 255 / 9%);
   --input: rgb(255 255 255 / 14%);

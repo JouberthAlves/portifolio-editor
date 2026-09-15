@@ -2,9 +2,10 @@
 
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, Clapperboard, Mail, MessageCircle, Palette, Play, Sparkles, Volume2 } from "lucide-react";
 import BlurText from "@/components/BlurText";
+import CircularText from "@/components/CircularText";
 import CountUp from "@/components/CountUp";
 import DecryptedText from "@/components/DecryptedText";
 import SpotlightCard from "@/components/SpotlightCard";
@@ -222,28 +223,111 @@ export function Testimonials() {
   );
 }
 
+function useSaoPauloClock() {
+  const [now, setNow] = useState<Date | null>(null);
+  useEffect(() => {
+    const tick = () => setNow(new Date());
+    const first = setTimeout(tick, 0);
+    const id = setInterval(tick, 1000);
+    return () => {
+      clearTimeout(first);
+      clearInterval(id);
+    };
+  }, []);
+  return now;
+}
+
+function SlateCell({ label, value }: { label: string; value: React.ReactNode }) {
+  return (
+    <div className="flex min-w-0 flex-col gap-1.5 p-4">
+      <span className="font-mono text-[0.6rem] tracking-[0.2em] text-muted-foreground uppercase">{label}</span>
+      <span className="display truncate text-2xl leading-none md:text-3xl">{value}</span>
+    </div>
+  );
+}
+
+// Claquete com os dados da "próxima cena" — composta sobre o Card do shadcn
+function Slate() {
+  const { t, lang } = useLang();
+  const s = t.contact.slate;
+  const now = useSaoPauloClock();
+  const locale = lang === "pt" ? "pt-BR" : "en-US";
+  const date = now ? now.toLocaleDateString(locale, { timeZone: "America/Sao_Paulo", day: "2-digit", month: "2-digit", year: "numeric" }) : "--/--/----";
+  const time = now ? now.toLocaleTimeString("pt-BR", { timeZone: "America/Sao_Paulo", hour12: false }) : "--:--:--";
+
+  return (
+    <div className="relative w-full max-w-md lg:ml-auto">
+      {/* selo giratório */}
+      <div className="absolute -top-16 -right-4 z-10 hidden size-36 place-items-center sm:grid md:-right-10">
+        <CircularText text={t.contact.badge.toUpperCase()} spinDuration={18} onHover="speedUp" className="!size-36 font-mono text-[0.62rem] tracking-[0.1em] text-foreground" />
+        <span className="absolute grid size-14 place-items-center rounded-full border border-foreground/30 bg-background">
+          <span className="rec-dot size-3 rounded-full bg-rec" />
+        </span>
+      </div>
+
+      {/* bastão da claquete */}
+      <div
+        className="h-10 origin-bottom-left -rotate-6 rounded-t-[var(--radius)] border border-b-0 border-border transition-transform duration-500 ease-[var(--ease-cine)] group-hover/slate:rotate-0"
+        style={{ background: "repeating-linear-gradient(-45deg, var(--foreground) 0 22px, var(--background) 22px 44px)" }}
+        aria-hidden
+      />
+      <div
+        className="h-6 border border-y-0 border-border"
+        style={{ background: "repeating-linear-gradient(45deg, var(--foreground) 0 22px, var(--background) 22px 44px)" }}
+        aria-hidden
+      />
+
+      <Card className="gap-0 rounded-t-none rounded-b-[var(--radius)] border border-border bg-card py-0 ring-0">
+        <CardContent className="px-0">
+          <div className="border-b border-border">
+            <SlateCell label={s.prod} value={s.prodValue} />
+          </div>
+          <div className="grid grid-cols-2 divide-x divide-border border-b border-border">
+            <SlateCell label={s.director} value={s.directorValue} />
+            <SlateCell label={s.editor} value="Caio Vidal" />
+          </div>
+          <div className="grid grid-cols-3 divide-x divide-border border-b border-border">
+            <SlateCell label={s.roll} value="A001" />
+            <SlateCell label={s.scene} value="01" />
+            <SlateCell label={s.take} value="01" />
+          </div>
+          <div className="grid grid-cols-2 divide-x divide-border">
+            <SlateCell label={s.date} value={<span className="font-mono text-lg tabular-nums md:text-xl">{date}</span>} />
+            <SlateCell label={s.time} value={<span className="font-mono text-lg tabular-nums md:text-xl">{time}</span>} />
+          </div>
+        </CardContent>
+        <CardFooter className="gap-2 rounded-b-[var(--radius)] border-t border-border bg-card px-4 py-3 font-mono text-[0.68rem] tracking-[0.15em] uppercase">
+          <span className="relative flex size-2">
+            <span className="absolute inline-flex size-full animate-ping rounded-full bg-live/60 motion-reduce:animate-none" />
+            <span className="relative inline-flex size-2 rounded-full bg-live" />
+          </span>
+          {s.status}
+        </CardFooter>
+      </Card>
+    </div>
+  );
+}
+
 export function Contact() {
   const { t } = useLang();
   return (
     <section id="contact" className="relative scroll-mt-16 overflow-hidden border-t border-border pt-24 md:pt-36" aria-labelledby="contact-title">
-      <div className="mx-auto max-w-7xl px-4 sm:px-8">
-        <p className="eyebrow mb-6">{t.contact.eyebrow}</p>
-        <h2 id="contact-title" className="display text-[clamp(4rem,17vw,15rem)]">
-          <span className="block">{t.contact.title[0]}</span>
-          <span className="flex items-center gap-[0.15em]">
-            {t.contact.title[1]}
-            <span className="rec-dot inline-block size-[0.18em] rounded-full bg-rec" aria-hidden />
-          </span>
-        </h2>
+      <div className="mx-auto grid max-w-7xl items-center gap-16 px-4 sm:px-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:gap-10">
+        <div>
+          <p className="eyebrow mb-6">{t.contact.eyebrow}</p>
+          <h2 id="contact-title" className="display text-[clamp(4rem,15vw,11.5rem)]">
+            <span className="block">{t.contact.title[0]}</span>
+            <span className="flex items-center gap-[0.15em]">
+              {t.contact.title[1]}
+              <span className="rec-dot inline-block size-[0.18em] rounded-full bg-rec" aria-hidden />
+            </span>
+          </h2>
 
-        <div className="mt-10 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-          <div>
-            <p className="mb-4 max-w-md text-lg text-muted-foreground">{t.contact.body}</p>
-            <a href={`mailto:${EMAIL}`} className="cursor-target font-mono text-xl md:text-3xl">
-              <DecryptedText text={EMAIL} animateOn="inViewHover" speed={40} maxIterations={14} sequential revealDirection="start" encryptedClassName="text-muted-foreground" />
-            </a>
-          </div>
-          <div className="flex flex-wrap gap-3">
+          <p className="mt-10 mb-4 max-w-md text-lg text-muted-foreground">{t.contact.body}</p>
+          <a href={`mailto:${EMAIL}`} className="cursor-target font-mono text-xl md:text-3xl">
+            <DecryptedText text={EMAIL} animateOn="inViewHover" speed={40} maxIterations={14} sequential revealDirection="start" encryptedClassName="text-muted-foreground" />
+          </a>
+          <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild size="lg" className="cursor-target h-12 bg-rec px-6 text-foreground hover:bg-rec/85">
               <a href={`mailto:${EMAIL}`}>
                 <Mail /> {t.contact.email} <ArrowUpRight />
@@ -255,6 +339,10 @@ export function Contact() {
               </a>
             </Button>
           </div>
+        </div>
+
+        <div className="group/slate cursor-target pt-10 lg:pt-0">
+          <Slate />
         </div>
       </div>
 

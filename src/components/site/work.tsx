@@ -14,10 +14,11 @@ const projects = [
   { slug: "cafe", title: "Origem", client: "Café Origem", type: { pt: "Publicidade", en: "Commercial" }, year: 2025, span: "" },
   { slug: "rota", title: "Rota 040", client: "Rota 040", type: { pt: "Publicidade", en: "Commercial" }, year: 2025, span: "" },
   { slug: "silencio", title: "Silêncio", client: "Norte Filmes", type: { pt: "Curta-metragem", en: "Short film" }, year: 2024, span: "" },
-  { slug: "pulso", title: "Largada", client: "PULSO", type: { pt: "Campanha", en: "Campaign" }, year: 2024, span: "md:col-span-2" },
   { slug: "casa", title: "Casa Aberta", client: "Casa Aberta", type: { pt: "Documentário", en: "Documentary" }, year: 2024, span: "" },
-  { slug: "sertao", title: "Ecos do Sertão", client: "Selo Grave", type: { pt: "Documentário", en: "Documentary" }, year: 2023, span: "md:col-span-3" },
+  { slug: "pulso", title: "Largada", client: "PULSO", type: { pt: "Campanha", en: "Campaign" }, year: 2024, span: "md:col-span-2" },
+  { slug: "sertao", title: "Ecos do Sertão", client: "Selo Grave", type: { pt: "Documentário", en: "Documentary" }, year: 2023, span: "" },
 ];
+// Grade de 3 colunas: 2x2 + 2 | 1 + 1 + 1 | 2 + 1 → todas as linhas fecham, sem buracos
 
 export function Work() {
   const { t, lang } = useLang();
