@@ -1,36 +1,28 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Caio Vidal — Portfólio de editor de vídeo
 
-## Getting Started
+Portfólio fictício (PT/EN) com hero cinematográfico: uma câmera de cinema que se desmonta conforme o scroll.
 
-First, run the development server:
+## Stack
+
+- Next.js 16 (App Router) + Tailwind CSS 4
+- shadcn/ui (button, badge, card, sheet, avatar, separator)
+- React Bits: Noise, TargetCursor, LogoLoop, BlurText, DecryptedText, CountUp, GradualBlur, LightRays, ScrollVelocity, GlareHover, SpotlightCard
+
+## Hero em scroll
+
+`public/video/hero.mp4` é um vídeo de 5s, 60fps, 1920px, **com todos os quadros como keyframe**
+(necessário para `video.currentTime` acompanhar o scroll sem travar). Para regenerar a partir de um vídeo bruto:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+ffmpeg -y -i raw.mp4 -vf "minterpolate=fps=60:mi_mode=mci:mc_mode=aobmc:vsbmc=1:me_mode=bidir:search_param=32" -c:v libx264 -crf 16 -an interp.mp4
+ffmpeg -y -i interp.mp4 -vf "scale=1920:-2:flags=lanczos" -c:v libx264 -x264-params keyint=1:min-keyint=1:scenecut=0 -g 1 -crf 18 -preset slow -pix_fmt yuv420p -movflags +faststart -an public/video/hero.mp4
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+A lógica de binding fica em `src/components/site/hero.tsx`. Textos PT/EN em `src/lib/i18n.tsx`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Rodando
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm install
+npm run dev
+```

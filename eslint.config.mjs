@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Componentes instalados do React Bits (código de terceiros, mantido como veio)
+    "src/components/*.tsx",
   ]),
 ]);
 
